@@ -8,6 +8,21 @@ import numpy as np
 from imutils.video import FPS
 from imutils.video import VideoStream
 import copyreg as copy_reg
+import firebase_admin
+from firebase_admin import credentials, db,firestore
+import datetime
+
+
+# Firebase initialization
+
+cred = credentials.Certificate("serviceAccountKey.json")
+firebase_admin.initialize_app(cred)
+firestore_client = firestore.client()
+# Day of the week
+
+today_day = datetime.date.today()
+days = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
+print("Today weekday is ",days[today_day.weekday()])
 
 # load serialized face detector
 print("Loading Face Detector...")
@@ -31,8 +46,36 @@ time.sleep(2.0)
 # start the FPS throughput estimator
 fps = FPS().start()
 
+present = []
+#
+def firebase_get_present():
+	col_ref = firestore_client.collection("Attandance").document(f"{days[today_day.weekday()]}").collection("Students")
+	query_ref = col_ref.where("Attendance", "==", "Present").stream()
+	for doc in query_ref:
+		if doc.to_dict()["Name"] not in present:
+			present.append(doc.to_dict()["Name"])
+	return present
+firebase_get_present()
+
+def firebase_store(st_id):
+	doc_ref = firestore_client.collection("Attandance").document(f"{days[today_day.weekday()]}").collection("Students").document(f"{st_id}")
+	doc_ref.update({
+		"Attendance" : "Present",
+		"TIME" : firestore.SERVER_TIMESTAMP
+	})
+
+def firebase_get(name):
+	st_id = ""
+	col_ref = firestore_client.collection("Attandance").document(f"{days[today_day.weekday()]}").collection("Students")
+	query_ref = col_ref.where("Name", "==", name).stream()
+	for doc in query_ref:
+		st_id = doc.id
+	return st_id
 # loop over frames from the video file stream
 while True:
+	if len(present) < 2:
+	
+		firebase_get_present()
 	# grab the frame from the threaded video stream
 	frame = vs.read()
 
@@ -80,10 +123,26 @@ while True:
 			if proba < 0.3:
 				continue 
 			# draw the bounding box of the face along with the associated probability
-			text = "{}: {:.2f}%".format(name, proba * 100)
+			text = "{}".format(name)
+			
+				
 			y = startY - 10 if startY - 10 > 10 else startY + 10
-			cv2.rectangle(frame, (startX, startY), (endX, endY),
-				(0, 0, 255), 2)
+
+			if text != "Unknown":
+				print(present)
+				if name not in present:
+					firebase_store(firebase_get(name))
+					cv2.rectangle(frame, (startX, startY), (endX, endY),
+						(0, 0, 255), 2)
+			
+				else:
+					cv2.rectangle(frame, (startX, startY), (endX, endY),
+						(0, 255, 0), 2)
+					continue
+			else:
+				cv2.rectangle(frame, (startX, startY), (endX, endY),
+					(255, 0, 0), 2)
+				continue
 			cv2.putText(frame, text, (startX, y),
 				cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 255), 2)
 

@@ -13,19 +13,46 @@ today_day = datetime.date.today()
 days = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
 print("Today weekday is ",days[today_day.weekday()])
 
-# To create a collection with documents in the database
-doc_ref = firestore_client.collection("Attandance").document(f"{days[today_day.weekday()]}")
-doc = doc_ref.get()
-print(f"{doc.id} => {doc.to_dict()}")
 
-sub_coll = doc_ref.collection("Students")
-sub_coll.document("210226").set({
-    "Name": "Aayush Pandey",
-    "Age": 20,
-    "Address": "Biratnagar",
-    "Time" : firestore.SERVER_TIMESTAMP,
-    "Attendance" : "Present"
-})
+
+
+present = []
+#
+def firebase_get_present():
+	col_ref = firestore_client.collection("Attandance").document(f"{days[today_day.weekday()]}").collection("Students")
+	query_ref = col_ref.where("Attendance", "==", "Present").stream()
+	for doc in query_ref:
+		
+		present.append(doc.to_dict()["Name"]	)
+	return present
+firebase_get_present()
+print(present)
+
+# # Firebase database
+# def firebase_create(st_id,name,age,address):
+# 	doc_ref = firestore_client.collection("Attandance").document(f"Saturday").collection("Students").document(f"{st_id}")
+# 	doc_ref.set({
+# 		"Name": name,
+# 		"Age": age,
+# 		"Address": address,
+# 	})
+# firebase_create("210226","Aayush",20,"Biratnagar")
+# firebase_create("210227","Bishwash",19,"Kathmandu")
+
+
+# # To create a collection with documents in the database
+# doc_ref = firestore_client.collection("Attandance").document(f"{days[today_day.weekday()]}")
+# doc = doc_ref.get()
+# print(f"{doc.id} => {doc.to_dict()}")
+
+# sub_coll = doc_ref.collection("Students")
+# sub_coll.document("210226").set({
+#     "Name": "Aayush Pandey",
+#     "Age": 20,
+#     "Address": "Biratnagar",
+#     "Time" : firestore.SERVER_TIMESTAMP,
+#     "Attendance" : "Present"
+# })
 
 
 # #  To get all the documents in the collection
