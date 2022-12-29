@@ -20,9 +20,8 @@ firebase_admin.initialize_app(cred)
 firestore_client = firestore.client()
 # Day of the week
 
-today_day = datetime.date.today()
-days = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
-print("Today weekday is ",days[today_day.weekday()])
+date = datetime.datetime.now()
+att_date =f"{date.year}-{date.month}-{date.day}"
 
 # load serialized face detector
 print("Loading Face Detector...")
@@ -46,10 +45,34 @@ time.sleep(2.0)
 # start the FPS throughput estimator
 fps = FPS().start()
 
+
+
+students_names = [
+	"Aayush",
+	"Bishwash",
+]
+
+
 present = []
 #
+
+def firebase_set_studets():
+	for student in students_names:
+		if student == "Aayush":
+			doc_ref = firestore_client.collection("Attandance").document(f"{att_date}").collection("Students").document("210226")
+			doc_ref.set({
+				"Name" : student,
+				"Attendance" : "",
+			})
+		else:
+			doc_ref = firestore_client.collection("Attandance").document(f"{att_date}").collection("Students").document("210227")
+			doc_ref.set({
+					"Name" : student,
+					"Attendance" : "",
+				})
+firebase_set_studets()
 def firebase_get_present():
-	col_ref = firestore_client.collection("Attandance").document(f"{days[today_day.weekday()]}").collection("Students")
+	col_ref = firestore_client.collection("Attandance").document(f"{att_date}").collection("Students")
 	query_ref = col_ref.where("Attendance", "==", "Present").stream()
 	for doc in query_ref:
 		if doc.to_dict()["Name"] not in present:
@@ -58,7 +81,8 @@ def firebase_get_present():
 firebase_get_present()
 
 def firebase_store(st_id):
-	doc_ref = firestore_client.collection("Attandance").document(f"{days[today_day.weekday()]}").collection("Students").document(f"{st_id}")
+	doc_ref = firestore_client.collection("Attandance").document(f"{att_date}").collection("Students").document(f"{st_id}")
+
 	doc_ref.update({
 		"Attendance" : "Present",
 		"TIME" : firestore.SERVER_TIMESTAMP
@@ -66,11 +90,22 @@ def firebase_store(st_id):
 
 def firebase_get(name):
 	st_id = ""
-	col_ref = firestore_client.collection("Attandance").document(f"{days[today_day.weekday()]}").collection("Students")
+	col_ref = firestore_client.collection("Attandance").document(f"{att_date}").collection("Students")
 	query_ref = col_ref.where("Name", "==", name).stream()
 	for doc in query_ref:
 		st_id = doc.id
 	return st_id
+
+
+
+
+
+
+
+
+
+
+
 # loop over frames from the video file stream
 while True:
 	if len(present) < 2:
@@ -129,9 +164,9 @@ while True:
 			y = startY - 10 if startY - 10 > 10 else startY + 10
 
 			if text != "Unknown":
-				print(present)
-				if name not in present:
-					firebase_store(firebase_get(name))
+				if name in students_names:
+					if name not in present:
+						firebase_store(firebase_get(name))
 				
 			cv2.rectangle(frame, (startX, startY), (endX, endY),
 				(255, 0, 0), 2)

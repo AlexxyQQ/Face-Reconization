@@ -5,7 +5,7 @@ import datetime
 
 
 
-cred = credentials.Certificate("serviceAccountKey.json")
+cred = credentials.Certificate("Others/serviceAccountKey.json")
 firebase_admin.initialize_app(cred)
 firestore_client = firestore.client()
 
@@ -13,31 +13,31 @@ today_day = datetime.date.today()
 days = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
 print("Today weekday is ",days[today_day.weekday()])
 
+date = datetime.datetime.now()
+att_date =f"{date.year}-{date.month}-{date.day}"
 
-
-
-present = []
-#
-def firebase_get_present():
-	col_ref = firestore_client.collection("Attandance").document(f"{days[today_day.weekday()]}").collection("Students")
-	query_ref = col_ref.where("Attendance", "==", "Present").stream()
-	for doc in query_ref:
+# present = []
+# #
+# def firebase_get_present():
+# 	col_ref = firestore_client.collection("Attandance").document(f"{days[today_day.weekday()]}").collection("Students")
+# 	query_ref = col_ref.where("Attendance", "==", "Present").stream()
+# 	for doc in query_ref:
 		
-		present.append(doc.to_dict()["Name"]	)
-	return present
-firebase_get_present()
-print(present)
+# 		present.append(doc.to_dict()["Name"]	)
+# 	return present
+# firebase_get_present()
+# print(present)
 
-# # Firebase database
-# def firebase_create(st_id,name,age,address):
-# 	doc_ref = firestore_client.collection("Attandance").document(f"Saturday").collection("Students").document(f"{st_id}")
-# 	doc_ref.set({
-# 		"Name": name,
-# 		"Age": age,
-# 		"Address": address,
-# 	})
-# firebase_create("210226","Aayush",20,"Biratnagar")
-# firebase_create("210227","Bishwash",19,"Kathmandu")
+# Firebase database
+def firebase_create(st_id,name,age,address,day):
+	doc_ref = firestore_client.collection("Attandance").document(day).collection("Students").document(f"{st_id}")
+	doc_ref.set({
+		"Name": name,
+		"Age": age,
+		"Address": address,
+	})
+firebase_create("210226","Aayush",20,"Biratnagar")
+firebase_create("210227","Bishwash",19,"Kathmandu")
 
 
 # # To create a collection with documents in the database
