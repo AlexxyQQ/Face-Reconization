@@ -15,7 +15,7 @@ import datetime
 
 # Firebase initialization
 
-cred = credentials.Certificate("serviceAccountKey.json")
+cred = credentials.Certificate("Others/serviceAccountKey.json")
 firebase_admin.initialize_app(cred)
 firestore_client = firestore.client()
 # Day of the week
@@ -32,7 +32,7 @@ detector = cv2.dnn.readNetFromCaffe(protoPath, modelPath)
 
 # load serialized face embedding model
 print("Loading Face Recognizer...")
-embedder = cv2.dnn.readNetFromTorch("openface_nn4.small2.v1.t7")
+embedder = cv2.dnn.readNetFromTorch("Others/openface_nn4.small2.v1.t7")
 
 # load the actual face recognition model along with the label encoder
 recognizer = pickle.loads(open("output/recognizer", "rb").read())
@@ -132,17 +132,9 @@ while True:
 				print(present)
 				if name not in present:
 					firebase_store(firebase_get(name))
-					cv2.rectangle(frame, (startX, startY), (endX, endY),
-						(0, 0, 255), 2)
-			
-				else:
-					cv2.rectangle(frame, (startX, startY), (endX, endY),
-						(0, 255, 0), 2)
-					continue
-			else:
-				cv2.rectangle(frame, (startX, startY), (endX, endY),
-					(255, 0, 0), 2)
-				continue
+				
+			cv2.rectangle(frame, (startX, startY), (endX, endY),
+				(255, 0, 0), 2)
 			cv2.putText(frame, text, (startX, y),
 				cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 255), 2)
 

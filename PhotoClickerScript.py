@@ -13,10 +13,10 @@ while True:
     # Capture image-by-image
     ret, image = video_capture.read()
    
-    if image_count <= 51:  # 52 images will be taken
-        time.sleep(0.3) # wait 0.3 second
-        cv2.imwrite('dataset/face/{}.jpg'.format(image_count), image)
-    if image_count >= 51:
+    if image_count <= 16:  # 52 images will be taken
+        time.sleep(0.5) # wait 0.3 second
+        cv2.imwrite('dataset/{}-Aaryan.jpg'.format(image_count), image)
+    if image_count >= 16:
         # stop after 52 images
         print("Done")
         break

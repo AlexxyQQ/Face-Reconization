@@ -6,12 +6,13 @@ import pickle
 import cv2
 import os
 
+
 # load serialized face detector
 print("Loading Face Detector...")
 #For detecting faces 
-#PROTOTXT FILE (Plain text file)is a prototype ML model created for the use with caffe model which contains 
+#PROTOTXT FILE (Plain text file) is a prototype ML model created for the use with caffe model which contains 
 # an image classification or image segmentation model which is intended to be trained in caffee.
-protoPath = "face_detection_model/deploy.prototxt"
+protoPath = "face_detection_model/deploy.prototxt" # This helps in res
 #cafee is the dnn framework made for modularity , speed and expression and since it uses neural architecture
 #  it stores layers in the disk
 modelPath = "face_detection_model/res10_300x300_ssd_iter_140000.caffemodel"
@@ -23,7 +24,7 @@ print("Loading Face Recognizer...")
 #extracting face embeddings 
 #The model that is being read is a facial recognition model that has been trained to identify and encode the features of human faces.
 #The model is saved in a file in the Torch format, which is a popular library for deep learning in Python.
-embedder = cv2.dnn.readNetFromTorch("openface_nn4.small2.v1.t7")
+embedder = cv2.dnn.readNetFromTorch("Others/openface_nn4.small2.v1.t7")
 # grab the paths to the input images in our dataset
 print("Quantifying Faces...")
 imagePaths = list(paths.list_images("dataset"))
@@ -39,9 +40,9 @@ total = 0
 #to detect multiple faces we have used loop 
 for (i, imagePath) in enumerate(imagePaths):
 	# extract the person name from the image path
-	if (i%1000 == 0):
+	if (i%1 == 0):
 		print("Processing image {}/{}".format(i, len(imagePaths)))
-	name = imagePath.split(os.path.sep)[-2]
+	name = imagePath.split(os.path.sep)[-1].split("-")[-1].split(".")[0]
 
 	# load the image, resize it to have a width of 600 pixels (while maintaining the aspect ratio), and then grab the image dimensions
 	image = cv2.imread(imagePath)
