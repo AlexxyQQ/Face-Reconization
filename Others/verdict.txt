@@ -1,0 +1,57 @@
+Sample = 52
+Train Percentage = 50.00%
+Gross Accuracy = 83.27%
+Net Accuracy = 62.45%
+Detection Rate = 75.00%
+Sample = 52
+Train Percentage = 60.00%
+Gross Accuracy = 79.57%
+Net Accuracy = 79.57%
+Detection Rate = 100.00%
+Sample = 52
+Train Percentage = 65.00%
+Gross Accuracy = 84.21%
+Net Accuracy = 84.21%
+Detection Rate = 100.00%
+ 
+ 
+ 
+ 
+Sample = 52
+Train Percentage = 50.00%
+Gross Accuracy = 82.96%
+Net Accuracy = 62.22%
+Detection Rate = 75.00%
+Sample = 52
+Train Percentage = 60.00%
+Gross Accuracy = 84.21%
+Net Accuracy = 84.21%
+Detection Rate = 100.00%
+Sample = 52
+Train Percentage = 65.00%
+Gross Accuracy = 84.02%
+Net Accuracy = 84.02%
+Detection Rate = 100.00%
+ 
+ 
+ 
+ 
+Sample = 52
+Train Percentage = 50.00%
+Gross Accuracy = 85.10%
+Net Accuracy = 63.83%
+Detection Rate = 75.00%
+Sample = 52
+Train Percentage = 60.00%
+Gross Accuracy = 80.86%
+Net Accuracy = 80.86%
+Detection Rate = 100.00%
+Sample = 52
+Train Percentage = 65.00%
+Gross Accuracy = 81.37%
+Net Accuracy = 81.37%
+Detection Rate = 100.00%
+ 
+ 
+ 
+ 

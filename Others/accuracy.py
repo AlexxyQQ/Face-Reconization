@@ -16,7 +16,7 @@ for population in populations:
         protoPath = "face_detection_model/deploy.prototxt"
         modelPath = "face_detection_model/res10_300x300_ssd_iter_140000.caffemodel"
         detector = cv2.dnn.readNetFromCaffe(protoPath, modelPath) 
-        embedder = cv2.dnn.readNetFromTorch("openface_nn4.small2.v1.t7") 
+        embedder = cv2.dnn.readNetFromTorch("Others/openface_nn4.small2.v1.t7") 
         imagePaths = list(paths.list_images("dataset")) 
         # initialize our lists of extracted facial embeddings and corresponding people names
         knownEmbeddings = []
@@ -29,8 +29,8 @@ for population in populations:
             # extract the person name from the image path 
             if i == train-1: 
                 break
-            name = imagePath.split(
-                os.path.sep)[-1].split("-")[1].split(".")[0] 
+            name = imagePath.split(os.path.sep)[-1].split("-")[-1].split(".")[0]
+            print(name)
             # load the image, resize it to have a width of 600 pixels (while maintaining the aspect ratio), and then grab the image dimensions
             image = cv2.imread(imagePath)
             image = imutils.resize(image, width=600)
