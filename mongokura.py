@@ -40,6 +40,21 @@ def fetch_student_info(SID):
     r = list(col.find(filter))
     return r
 
+ 
+def new_day():
+    today = "2023-02-22"
+    # check time
+    if(str(datetime.datetime.today()) [0:10]!= today):
+        col = db.get_collection("students")  
+        today = str(datetime.datetime.today()) [0:10] 
+        filter = { } 
+        update = {"$set":{f"{date}":{"datetime":today,"attendance": "Absent" }  }} 
+        col.update_many(filter, update)
+    #starts a day and absents all students
+
+ 
+
+
 def is_present(SID, CID, date):
     col = db.get_collection("students") 
     filter = {"name" : SID, "classes" : {"$in":CID} }
@@ -53,7 +68,7 @@ def is_present(SID, CID, date):
     except:
         return False     
  
-print(is_present("Student 72",["STA103IAE"],"2023-02-17"))
+#print(is_present("Student 72",["STA103IAE"],"2023-02-17"))
 # fetch_student_info("Student 0")
 # print(get_students(["STA103IAE"]))     
 
@@ -89,5 +104,5 @@ def attendance(SID, CID ):
     
         #update the student document to mark present {dateandtime, attendance , cid }
     #else mark the student as absent
-attendance("Student 72", "STA103IAE" )
+#attendance("Student 72", "STA103IAE" )
  

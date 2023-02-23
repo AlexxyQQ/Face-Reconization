@@ -94,7 +94,8 @@ for i in range(80):
     student = {
         "name": "Student " + str(i),
         "age": age,
-        "classes": class_ids
+        "classes": class_ids  
+
     }
     students.append(student)
 
